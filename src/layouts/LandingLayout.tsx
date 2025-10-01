@@ -3,7 +3,7 @@ import { Button } from "../components/ui/button";
 
 export function LandingLayout() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="min-h-screen bg-gradient-to-br from-slate-40 to-slate-100">
             {/* Navigation Header */}
             <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
                 <div className="container mx-auto px-4 py-4">
