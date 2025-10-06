@@ -14,8 +14,7 @@ export function Landing() {
             <section className="py-20 lg:py-32">
                 <div className="container mx-auto px-4 text-center">
                     <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                        Your Health,{" "}
-                        <span className="text-blue-600">Our Priority</span>
+                        Your Health, Our Priority
                     </h1>
                     <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                         Experience world-class healthcare with our comprehensive

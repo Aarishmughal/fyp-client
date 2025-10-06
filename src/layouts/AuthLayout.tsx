@@ -1,10 +1,11 @@
+import { ArrowLeftIcon } from "lucide-react";
 import { Outlet, Link } from "react-router-dom";
 
 export function AuthLayout() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50">
-            <div className="flex min-h-screen">
-                {/* Left side - Branding */}
+            <div className="flex min-h-screen max-h-screen overflow-hidden">
+                {/* Left side - Fixed */}
                 <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-12 flex-col justify-between">
                     <div>
                         <Link
@@ -61,36 +62,39 @@ export function AuthLayout() {
                     </div>
                 </div>
 
-                {/* Right side - Auth Forms */}
-                <div className="flex-1 flex items-center justify-center p-8">
-                    <div className="w-full max-w-md">
-                        {/* Mobile Logo */}
-                        <div className="lg:hidden text-center mb-8">
-                            <Link
-                                to="/"
-                                className="inline-flex items-center space-x-2"
-                            >
-                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">
-                                        H
-                                    </span>
+                {/* Right side - Scrollable */}
+                <div className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 overflow-y-auto">
+                        <div className="min-h-full flex items-center justify-center p-8">
+                            <div className="w-full max-w-md">
+                                <div className="lg:hidden text-center mb-8">
+                                    <Link
+                                        to="/"
+                                        className="inline-flex items-center space-x-2"
+                                    >
+                                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">
+                                                H
+                                            </span>
+                                        </div>
+                                        <span className="text-xl font-semibold text-gray-900">
+                                            HealthCare Solutions
+                                        </span>
+                                    </Link>
                                 </div>
-                                <span className="text-xl font-semibold text-gray-900">
-                                    HealthCare Solutions
-                                </span>
-                            </Link>
-                        </div>
 
-                        <Outlet />
+                                <Outlet />
 
-                        {/* Back to home link */}
-                        <div className="mt-8 text-center">
-                            <Link
-                                to="/"
-                                className="text-sm text-gray-600 hover:text-gray-900 font-medium inline-flex items-center"
-                            >
-                                ← Back to Home
-                            </Link>
+                                <div className="mt-8 text-center">
+                                    <Link
+                                        to="/"
+                                        className="text-sm text-gray-600 hover:text-gray-900 font-medium inline-flex items-center"
+                                    >
+                                        <ArrowLeftIcon className="size-4 me-2" />{" "}
+                                        Back to Home
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
