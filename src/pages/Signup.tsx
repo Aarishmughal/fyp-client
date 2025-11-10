@@ -8,16 +8,30 @@ import {
     CardTitle,
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
+import {
+    Field,
+    FieldLabel,
+    FieldDescription,
+    FieldError,
+} from "../components/ui/field";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../components/ui/select";
+import { Checkbox } from "../components/ui/checkbox";
 
 export function Signup() {
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
-        phone: "",
+        type: "",
         password: "",
-        confirmPassword: "",
-        agreeToTerms: false,
+        passwordConfirm: "",
+        isAgreed: false,
+        hasReadTooltips: false,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -35,6 +49,27 @@ export function Signup() {
         }));
     };
 
+    const handleSelectChange = (value: string) => {
+        setFormData((prev) => ({
+            ...prev,
+            type: value,
+        }));
+    };
+
+    const handleCheckboxChange = (checked: boolean) => {
+        setFormData((prev) => ({
+            ...prev,
+            isAgreed: checked,
+        }));
+    };
+
+    const handleTooltipCheckboxChange = (checked: boolean) => {
+        setFormData((prev) => ({
+            ...prev,
+            hasReadTooltips: checked,
+        }));
+    };
+
     return (
         <div className="w-full">
             <Card className="border-0 shadow-lg">
@@ -49,53 +84,27 @@ export function Signup() {
 
                 <CardContent className="space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label
-                                    htmlFor="firstName"
-                                    className="text-sm font-medium text-gray-700"
-                                >
-                                    First Name
-                                </label>
-                                <Input
-                                    id="firstName"
-                                    name="firstName"
-                                    type="text"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    placeholder="Enter your first name"
-                                    required
-                                    className="w-full"
-                                />
-                            </div>
+                        <Field>
+                            <FieldLabel htmlFor="name">Name</FieldLabel>
+                            <Input
+                                id="name"
+                                name="name"
+                                type="text"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Enter your full name"
+                                required
+                            />
+                            <FieldDescription>
+                                Please enter your full name as it appears on
+                                official documents.
+                            </FieldDescription>
+                        </Field>
 
-                            <div className="space-y-2">
-                                <label
-                                    htmlFor="lastName"
-                                    className="text-sm font-medium text-gray-700"
-                                >
-                                    Last Name
-                                </label>
-                                <Input
-                                    id="lastName"
-                                    name="lastName"
-                                    type="text"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    placeholder="Enter your last name"
-                                    required
-                                    className="w-full"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="email"
-                                className="text-sm font-medium text-gray-700"
-                            >
+                        <Field>
+                            <FieldLabel htmlFor="email">
                                 Email Address
-                            </label>
+                            </FieldLabel>
                             <Input
                                 id="email"
                                 name="email"
@@ -104,36 +113,48 @@ export function Signup() {
                                 onChange={handleChange}
                                 placeholder="Enter your email"
                                 required
-                                className="w-full"
                             />
-                        </div>
+                            <FieldDescription>
+                                We'll use this email for account verification
+                                and communications.
+                            </FieldDescription>
+                        </Field>
 
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="phone"
-                                className="text-sm font-medium text-gray-700"
+                        <Field>
+                            <FieldLabel htmlFor="type">Account Type</FieldLabel>
+                            <Select
+                                value={formData.type}
+                                onValueChange={handleSelectChange}
                             >
-                                Phone Number
-                            </label>
-                            <Input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                placeholder="Enter your phone number"
-                                required
-                                className="w-full"
-                            />
-                        </div>
+                                <SelectTrigger id="type">
+                                    <SelectValue placeholder="Select account type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="hospital">
+                                        Hospital
+                                    </SelectItem>
+                                    <SelectItem value="clinic">
+                                        Clinic
+                                    </SelectItem>
+                                    <SelectItem value="independent_doctor">
+                                        Independent Doctor
+                                    </SelectItem>
+                                    <SelectItem value="pharmacy">
+                                        Pharmacy
+                                    </SelectItem>
+                                    <SelectItem value="platform">
+                                        Platform
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FieldDescription>
+                                Choose the type that best describes your
+                                organization.
+                            </FieldDescription>
+                        </Field>
 
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="password"
-                                className="text-sm font-medium text-gray-700"
-                            >
-                                Password
-                            </label>
+                        <Field>
+                            <FieldLabel htmlFor="password">Password</FieldLabel>
                             <Input
                                 id="password"
                                 name="password"
@@ -142,59 +163,73 @@ export function Signup() {
                                 onChange={handleChange}
                                 placeholder="Create a secure password"
                                 required
-                                className="w-full"
                             />
-                        </div>
+                            <FieldDescription>
+                                Must be at least 8 characters with a mix of
+                                letters and numbers.
+                            </FieldDescription>
+                        </Field>
 
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="confirmPassword"
-                                className="text-sm font-medium text-gray-700"
-                            >
+                        <Field>
+                            <FieldLabel htmlFor="passwordConfirm">
                                 Confirm Password
-                            </label>
+                            </FieldLabel>
                             <Input
-                                id="confirmPassword"
-                                name="confirmPassword"
+                                id="passwordConfirm"
+                                name="passwordConfirm"
                                 type="password"
-                                value={formData.confirmPassword}
+                                value={formData.passwordConfirm}
                                 onChange={handleChange}
                                 placeholder="Confirm your password"
                                 required
-                                className="w-full"
                             />
-                        </div>
+                            <FieldDescription>
+                                Re-enter your password to confirm.
+                            </FieldDescription>
+                            {formData.passwordConfirm &&
+                                formData.password !==
+                                    formData.passwordConfirm && (
+                                    <FieldError>
+                                        Passwords do not match
+                                    </FieldError>
+                                )}
+                        </Field>
 
-                        <div className="flex items-start space-x-2">
-                            <input
-                                id="agreeToTerms"
-                                name="agreeToTerms"
-                                type="checkbox"
-                                checked={formData.agreeToTerms}
-                                onChange={handleChange}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
-                                required
-                            />
-                            <label
-                                htmlFor="agreeToTerms"
-                                className="text-sm text-gray-600"
-                            >
-                                I agree to the{" "}
-                                <Link
-                                    to="/terms"
-                                    className="text-blue-600 hover:text-blue-800 font-medium"
-                                >
-                                    Terms of Service
-                                </Link>{" "}
-                                and{" "}
-                                <Link
-                                    to="/privacy"
-                                    className="text-blue-600 hover:text-blue-800 font-medium"
-                                >
-                                    Privacy Policy
-                                </Link>
-                            </label>
-                        </div>
+                        <Field orientation="horizontal">
+                            <div className="flex items-start space-x-3">
+                                <Checkbox
+                                    id="isAgreed"
+                                    checked={formData.isAgreed}
+                                    onCheckedChange={handleCheckboxChange}
+                                    required
+                                />
+                                <div className="grid gap-1.5 leading-none">
+                                    <FieldLabel
+                                        htmlFor="isAgreed"
+                                        className="text-sm font-normal cursor-pointer"
+                                    >
+                                        I agree to the{" "}
+                                        <Link
+                                            to="/terms"
+                                            className="text-blue-600 hover:text-blue-800 font-medium underline"
+                                        >
+                                            Terms of Service
+                                        </Link>{" "}
+                                        and{" "}
+                                        <Link
+                                            to="/privacy"
+                                            className="text-blue-600 hover:text-blue-800 font-medium underline"
+                                        >
+                                            Privacy Policy
+                                        </Link>
+                                    </FieldLabel>
+                                    <FieldDescription>
+                                        You must accept our terms and conditions
+                                        to create an account.
+                                    </FieldDescription>
+                                </div>
+                            </div>
+                        </Field>
 
                         <Button type="submit" className="w-full" size="lg">
                             Create Account

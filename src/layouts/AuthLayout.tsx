@@ -4,9 +4,9 @@ import { Outlet, Link } from "react-router-dom";
 export function AuthLayout() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-50">
-            <div className="flex min-h-screen max-h-screen overflow-hidden">
+            <div className="flex h-screen">
                 {/* Left side - Fixed */}
-                <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-12 flex-col justify-between">
+                <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-12 flex-col justify-between overflow-hidden">
                     <div>
                         <Link
                             to="/"
@@ -56,44 +56,41 @@ export function AuthLayout() {
 
                     <div className="text-blue-200 text-sm">
                         <p>
-                            &copy; 2025 HealthCare Solutions. All rights
-                            reserved.
+                            &copy; {new Date().getFullYear()} HealthCare
+                            Solutions. All rights reserved.
                         </p>
                     </div>
                 </div>
 
-                {/* Right side - Scrollable */}
-                <div className="flex-1 flex flex-col overflow-hidden">
-                    <div className="flex-1 overflow-y-auto">
-                        <div className="min-h-full flex items-center justify-center p-8">
-                            <div className="w-full max-w-md">
-                                <div className="lg:hidden text-center mb-8">
-                                    <Link
-                                        to="/"
-                                        className="inline-flex items-center space-x-2"
-                                    >
-                                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                                            <span className="text-white font-bold text-sm">
-                                                H
-                                            </span>
-                                        </div>
-                                        <span className="text-xl font-semibold text-gray-900">
-                                            HealthCare Solutions
+                <div className="flex-1 overflow-y-auto">
+                    <div className="p-8 py-12">
+                        <div className="w-full max-w-md mx-auto">
+                            <div className="lg:hidden text-center mb-8">
+                                <Link
+                                    to="/"
+                                    className="inline-flex items-center space-x-2"
+                                >
+                                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                        <span className="text-white font-bold text-sm">
+                                            H
                                         </span>
-                                    </Link>
-                                </div>
+                                    </div>
+                                    <span className="text-xl font-semibold text-gray-900">
+                                        HealthCare Solutions
+                                    </span>
+                                </Link>
+                            </div>
 
-                                <Outlet />
+                            <Outlet />
 
-                                <div className="mt-8 text-center">
-                                    <Link
-                                        to="/"
-                                        className="text-sm text-gray-600 hover:text-gray-900 font-medium inline-flex items-center"
-                                    >
-                                        <ArrowLeftIcon className="size-4 me-2" />{" "}
-                                        Back to Home
-                                    </Link>
-                                </div>
+                            <div className="mt-8 text-center">
+                                <Link
+                                    to="/"
+                                    className="text-sm text-gray-600 hover:text-gray-900 font-medium inline-flex items-center"
+                                >
+                                    <ArrowLeftIcon className="size-4 mr-2" />{" "}
+                                    Back to Home
+                                </Link>
                             </div>
                         </div>
                     </div>
