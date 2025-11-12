@@ -1,35 +1,44 @@
 import { Routes, Route } from "react-router-dom";
 import { LandingLayout, AuthLayout } from "./layouts";
-import { Landing, Login, Signup } from "./pages";
-import "./App.css";
+import { Landing } from "./pages/main";
+import { Login, Signup } from "./pages/auth";
+import { AdminLogin, AdminSignup } from "./pages/admin";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { PublicRoute } from "./routes/PublicRoute";
+import { ROUTES } from "./routes/config";
+import "./styles/App.css";
 
 function App() {
-    return (
-        <Routes>
-            {/* Landing page route with LandingLayout */}
-            <Route path="/" element={<LandingLayout />}>
-                <Route index element={<Landing />} />
-            </Route>
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route element={<PublicRoute />}>
+        <Route path="/admin">
+          <Route path="login" element={<AdminLogin />} />
+          <Route path="signup" element={<AdminSignup />} />
+        </Route>
 
-            {/* Authentication routes with AuthLayout */}
-            <Route path="/auth" element={<AuthLayout />}>
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-            </Route>
+        <Route path="/login" element={<AuthLayout />}>
+          <Route index element={<Login />} />
+        </Route>
 
-            {/* Direct auth routes for convenience */}
-            <Route path="/login" element={<AuthLayout />}>
-                <Route index element={<Login />} />
-            </Route>
+        <Route path="/signup" element={<AuthLayout />}>
+          <Route index element={<Signup />} />
+        </Route>
 
-            <Route path="/signup" element={<AuthLayout />}>
-                <Route index element={<Signup />} />
-            </Route>
+        {/* Catch-all route - redirect to home */}
+        <Route path={ROUTES.LANDING} element={<LandingLayout />}>
+          <Route index element={<Landing />} />
+        </Route>
+        <Route path="*" element={<Landing />} />
+      </Route>
 
-            {/* Catch-all route - redirect to home */}
-            <Route path="*" element={<Landing />} />
-        </Routes>
-    );
+      {/* Protected routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route path={ROUTES.DASHBOARD} element={"This is a Protected Route"} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
