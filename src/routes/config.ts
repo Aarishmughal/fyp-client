@@ -4,6 +4,12 @@ export const AUTH_ROUTES = {
   SIGNUP: "/signup",
 } as const;
 
+export const USER_ROUTES = {
+  DASHBOARD: "/dashboard",
+  PROFILE: "/profile",
+  SETTINGS: "/settings",
+} as const;
+
 // Admin Routes
 export const ADMIN_ROUTES = {
   BASE: "/admin",

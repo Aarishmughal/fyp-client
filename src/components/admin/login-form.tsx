@@ -16,10 +16,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
 
+import { apiProvider } from "@/api";
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    await handleAdminLogin(email, password);
+  };
+  const handleAdminLogin = async (email: string, password: string) => {
+    try {
+      const response = await apiProvider.adminAuth.login({ email, password });
+      const { token, user } = response.data.data;
+
+      localStorage.setItem("authToken", token);
+      console.log("Admin logged in:", user.name);
+    } catch (error) {
+      console.error("Admin login failed:", error);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="hidden md:block">
@@ -31,7 +51,7 @@ export function LoginForm({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <form onSubmit={handleSubmit}>
               <FieldGroup>
                 <Field>
                   <FieldLabel htmlFor="email">Email</FieldLabel>
