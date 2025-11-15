@@ -6,7 +6,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Baskervville", serif;
+    font-family: "Geist", serif;
 }
 p,
 div,
@@ -16,4 +16,76 @@ input,
 label,
 textarea {
     font-family: "Geist", sans-serif;
+}
+
+/* Compact Mode Styles */
+.compact-mode {
+    --spacing-multiplier: 0.75;
+}
+
+.compact-mode .space-y-6 > * + * {
+    margin-top: calc(1.5rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .space-y-4 > * + * {
+    margin-top: calc(1rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .space-y-2 > * + * {
+    margin-top: calc(0.5rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .gap-6 {
+    gap: calc(1.5rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .gap-4 {
+    gap: calc(1rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .gap-2 {
+    gap: calc(0.5rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .p-4 {
+    padding: calc(1rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .p-6 {
+    padding: calc(1.5rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .py-4 {
+    padding-top: calc(1rem * var(--spacing-multiplier)) !important;
+    padding-bottom: calc(1rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode .px-4 {
+    padding-left: calc(1rem * var(--spacing-multiplier)) !important;
+    padding-right: calc(1rem * var(--spacing-multiplier)) !important;
+}
+
+.compact-mode h1 {
+    font-size: calc(2.25rem * var(--spacing-multiplier));
+    line-height: calc(2.5rem * var(--spacing-multiplier));
+}
+
+.compact-mode h2 {
+    font-size: calc(1.875rem * var(--spacing-multiplier));
+    line-height: calc(2.25rem * var(--spacing-multiplier));
+}
+
+.compact-mode h3 {
+    font-size: calc(1.5rem * var(--spacing-multiplier));
+    line-height: calc(2rem * var(--spacing-multiplier));
+}
+
+.compact-mode [class*="CardHeader"],
+.compact-mode [class*="CardContent"] {
+    padding: calc(1.5rem * var(--spacing-multiplier));
+}
+
+.compact-mode table td,
+.compact-mode table th {
+    padding: calc(0.75rem * var(--spacing-multiplier));
 }

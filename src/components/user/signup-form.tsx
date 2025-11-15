@@ -14,7 +14,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
 import { apiProvider, type SignupData } from "@/api";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -73,10 +72,9 @@ export function SignupForm({
       <div className="hidden md:block mt-42 lg:mt-20 pb-4">
         <Card>
           <CardHeader>
-            <CardTitle>Create an Administrator</CardTitle>
+            <CardTitle>Create an Account</CardTitle>
             <CardDescription>
-              Enter your information below to create a new Administrator
-              account.
+              Enter your information below to create a new account.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -87,7 +85,7 @@ export function SignupForm({
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Administrator"
+                    placeholder="User"
                     name="display-name"
                   />
                 </Field>
@@ -147,6 +145,32 @@ export function SignupForm({
                   <Button type="submit" disabled={loading} className="w-full">
                     {loading ? <Spinner /> : "Create Account"}
                   </Button>
+                  <FieldDescription className="px-6 text-center">
+                    Already have an account? <a href="/login">Log in</a>
+                  </FieldDescription>
+                </Field>
+                <Field>
+                  <p className="text-sm text-muted-foreground">
+                    By creating an account, you agree to our{" "}
+                    <a
+                      href="/terms"
+                      className="underline hover:text-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Terms of Service
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      href="/privacy"
+                      className="underline hover:text-primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Privacy Policy
+                    </a>
+                    .
+                  </p>
                 </Field>
               </FieldGroup>
             </form>
@@ -217,6 +241,32 @@ export function SignupForm({
                 <Button type="submit" disabled={loading} className="w-full">
                   {loading ? <Spinner /> : "Create Account"}
                 </Button>
+                <FieldDescription className="px-6 text-center">
+                  Already have an account? <a href="/login">Log in</a>
+                </FieldDescription>
+              </Field>
+              <Field>
+                <p className="text-sm text-muted-foreground">
+                  By creating an account, you agree to our{" "}
+                  <a
+                    href="/terms"
+                    className="underline hover:text-primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="/privacy"
+                    className="underline hover:text-primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
+                </p>
               </Field>
             </FieldGroup>
           </form>
