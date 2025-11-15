@@ -7,39 +7,62 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
 
-import { apiProvider } from "@/api";
+import { apiProvider, type LoginCredentials } from "@/api";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { AlertCircleIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router";
+import { ADMIN_ROUTES } from "@/routes/config";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    await handleAdminLogin(email, password);
-  };
-  const handleAdminLogin = async (email: string, password: string) => {
+    setLoading(true);
+    setError(null);
     try {
-      const response = await apiProvider.adminAuth.login({ email, password });
-      const { token, user } = response.data.data;
+      const formData = new FormData(event.currentTarget);
+      const credentials: LoginCredentials = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      };
 
-      localStorage.setItem("authToken", token);
-      console.log("Admin logged in:", user.name);
-    } catch (error) {
+      const response = await apiProvider.adminAuth.login(credentials);
+      const { accessToken, refreshToken, user } = response.data.data;
+
+      login(accessToken, refreshToken, user);
+
+      console.log("Admin logged in:", user.displayName);
+      toast.success(`Welcome back, ${user.displayName}!`);
+
+      navigate(ADMIN_ROUTES.DASHBOARD);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Invalid email or password. Please try again.";
+
       console.error("Admin login failed:", error);
+      toast.error("Login failed");
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="hidden md:block">
@@ -54,29 +77,45 @@ export function LoginForm({
             <form onSubmit={handleSubmit}>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <FieldLabel htmlFor="email">
+                    Email<span className="text-amber-800">*</span>
+                  </FieldLabel>
                   <Input
                     id="email"
                     type="email"
                     placeholder="m@example.com"
                     required
+                    name="email"
+                    disabled={loading}
                   />
                 </Field>
                 <Field>
                   <div className="flex items-center">
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <FieldLabel htmlFor="password">
+                      Password<span className="text-amber-800">*</span>
+                    </FieldLabel>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    name="password"
+                    disabled={loading}
+                  />
                 </Field>
+                {error && (
+                  <Field>
+                    <Alert variant="destructive">
+                      <AlertCircleIcon className="h-4 w-4" />
+                      <AlertTitle>Login Failed!</AlertTitle>
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  </Field>
+                )}
                 <Field>
-                  <Button type="submit">Login</Button>
-                  <Button variant="outline" type="button">
-                    Login with Google
+                  <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? <Spinner /> : "Log in"}
                   </Button>
-                  <FieldDescription className="text-center">
-                    Don&apos;t have an account?{" "}
-                    <Link to="/admin/signup">Sign up</Link>
-                  </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
@@ -89,32 +128,42 @@ export function LoginForm({
           <p className="text-muted-foreground">
             Enter Email address and Password to login as Admin
           </p>
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email-mobile">Email</FieldLabel>
                 <Input
-                  id="email"
+                  id="email-mobile"
                   type="email"
                   placeholder="m@example.com"
                   required
+                  name="email"
+                  disabled={loading}
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" type="password" required />
+                <FieldLabel htmlFor="password-mobile">Password</FieldLabel>
+                <Input
+                  id="password-mobile"
+                  type="password"
+                  required
+                  name="password"
+                  disabled={loading}
+                />
               </Field>
+              {error && (
+                <Field>
+                  <Alert variant="destructive">
+                    <AlertCircleIcon className="h-4 w-4" />
+                    <AlertTitle>Login Failed!</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                </Field>
+              )}
               <Field>
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? <Spinner /> : "Log in"}
                 </Button>
-                <Button variant="outline" type="button" className="w-full">
-                  Login with Google
-                </Button>
-                <FieldDescription className="text-center">
-                  Don&apos;t have an account?{" "}
-                  <Link to="/admin/signup">Sign up</Link>
-                </FieldDescription>
               </Field>
             </FieldGroup>
           </form>

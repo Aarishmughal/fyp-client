@@ -15,15 +15,62 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
+import { apiProvider, type SignupData } from "@/api";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Spinner } from "../ui/spinner";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { AlertCircleIcon } from "lucide-react";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData(event.currentTarget);
+      const credentials: SignupData = {
+        displayName: formData.get("displayName") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        passwordConfirm: formData.get("confirm-password") as string,
+      };
+      if (credentials.password != credentials.passwordConfirm) {
+        setError("Passwords do not match");
+        setLoading(false);
+        return;
+      }
+      const response = await apiProvider.adminAuth.signup(credentials);
+      const { accessToken, refreshToken, user } = response.data.data;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      console.log("Admin registered:", user.displayName);
+      toast.success(`Welcome , ${user.displayName && "Administrator"}!`);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Invalid email or password. Please try again.";
+
+      console.error("Admin register failed:", error);
+      toast.error("Registration failed");
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       {/* Desktop / Tablet View */}
-      <div className="hidden md:block">
+      <div className="hidden md:block mt-42 pb-4">
         <Card>
           <CardHeader>
             <CardTitle>Create an Administrator</CardTitle>
@@ -33,55 +80,73 @@ export function SignupForm({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <form onSubmit={handleSubmit}>
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                  <FieldLabel htmlFor="name">Display Name</FieldLabel>
                   <Input
                     id="name"
                     type="text"
-                    placeholder="John Doe"
-                    required
+                    placeholder="Administrator"
+                    name="display-name"
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <FieldLabel htmlFor="email">
+                    Email<span className="text-amber-800">*</span>
+                  </FieldLabel>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="m@example.com"
+                    placeholder="admin@mrs.com"
                     required
+                    name="email"
                   />
-                  <FieldDescription>
-                    We&apos;ll use this to contact you. We will not share your
-                    email with anyone else.
-                  </FieldDescription>
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input id="password" type="password" required />
-                  <FieldDescription>
-                    Must be at least 8 characters long.
-                  </FieldDescription>
+                  <FieldLabel htmlFor="password">
+                    Password<span className="text-amber-800">*</span>
+                  </FieldLabel>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Input
+                          id="password"
+                          type="password"
+                          required
+                          name="password"
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      Must be at least 8 characters long.
+                    </TooltipContent>
+                  </Tooltip>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="confirm-password">
-                    Confirm Password
+                    Confirm Password<span className="text-amber-800">*</span>
                   </FieldLabel>
-                  <Input id="confirm-password" type="password" required />
-                  <FieldDescription>
-                    Please confirm your password.
-                  </FieldDescription>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    required
+                    name="confirm-password"
+                  />
                 </Field>
+                {error && (
+                  <Field>
+                    <Alert variant="destructive">
+                      <AlertCircleIcon className="h-4 w-4" />
+                      <AlertTitle>Registration Failed!</AlertTitle>
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  </Field>
+                )}
                 <Field>
-                  <Button type="submit">Create Account</Button>
-                  <Button variant="outline" type="button">
-                    Sign up with Google
+                  <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? <Spinner /> : "Create Account"}
                   </Button>
-                  <FieldDescription className="text-center">
-                    Already have an account?{" "}
-                    <Link to="/admin/login">Log in</Link>
-                  </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
@@ -90,57 +155,68 @@ export function SignupForm({
       </div>
 
       {/* Mobile View */}
-      <div className="block md:hidden mt-64 pb-4">
+      <div className="block md:hidden mt-42 pb-4">
         <div className="space-y-4">
           <CardTitle>Create an Administrator</CardTitle>
           <p className="text-muted-foreground">
             Enter your information below to create a new Administrator account.
           </p>
-          <form className="space-y-4">
+          <form>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                <Input id="name" type="text" placeholder="John Doe" required />
+                <FieldLabel htmlFor="name">Display Name</FieldLabel>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Administrator"
+                  name="displayName"
+                />
               </Field>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">
+                  Email<span className="text-amber-800">*</span>
+                </FieldLabel>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="admin@mrs.com"
                   required
+                  name="email"
                 />
-                <FieldDescription>
-                  We&apos;ll use this to contact you. We will not share your
-                  email with anyone else.
-                </FieldDescription>
               </Field>
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" type="password" required />
+                <FieldLabel htmlFor="password">
+                  Password<span className="text-amber-800">*</span>
+                </FieldLabel>
+                <Input id="password" type="password" required name="password" />
                 <FieldDescription>
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
               <Field>
                 <FieldLabel htmlFor="confirm-password">
-                  Confirm Password
+                  Confirm Password<span className="text-amber-800">*</span>
                 </FieldLabel>
-                <Input id="confirm-password" type="password" required />
-                <FieldDescription>
-                  Please confirm your password.
-                </FieldDescription>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  required
+                  name="confirm-password"
+                />
               </Field>
+              {error && (
+                <Field>
+                  <Alert variant="destructive">
+                    <AlertCircleIcon className="h-4 w-4" />
+                    <AlertTitle>Registration Failed!</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                </Field>
+              )}
               <Field>
-                <Button type="submit" className="w-full">
-                  Create Account
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? <Spinner /> : "Create Account"}
                 </Button>
-                <Button variant="outline" type="button" className="w-full">
-                  Sign up with Google
-                </Button>
-                <FieldDescription className="text-center">
-                  Already have an account? <Link to="/admin/login">Log in</Link>
-                </FieldDescription>
               </Field>
             </FieldGroup>
           </form>

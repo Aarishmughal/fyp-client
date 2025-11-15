@@ -9,17 +9,18 @@ export interface LoginCredentials {
 }
 
 export interface SignupData {
-  name: string;
+  displayName?: string;
   email: string;
   password: string;
-  confirmPassword?: string;
+  passwordConfirm: string;
 }
 
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: {
     id: string;
-    name: string;
+    displayName: string;
     email: string;
     role?: string;
   };

@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -24,6 +25,7 @@ export function AuthLayout() {
         <TooltipContent>Go home</TooltipContent>
       </Tooltip>
       <Outlet />
+      <Toaster />
     </div>
   );
 }

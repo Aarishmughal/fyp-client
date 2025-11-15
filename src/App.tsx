@@ -7,12 +7,14 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { PublicRoute } from "./routes/PublicRoute";
 import { ADMIN_ROUTES, AUTH_ROUTES, PUBLIC_ROUTES } from "./routes/config";
 import "./styles/App.css";
+import FaisalMoversPitch from "./pages/main/Presentation";
 
 function App() {
   return (
     <Routes>
       {/* Public routes */}
       <Route element={<PublicRoute />}>
+        <Route path="/present" element={<FaisalMoversPitch />} />
         {/* Admin Auth Routes */}
         <Route path={ADMIN_ROUTES.LOGIN} element={<AuthLayout />}>
           <Route index element={<AdminLogin />} />
