@@ -35,6 +35,23 @@ export const API_ENDPOINTS = {
   // Admin Endpoints
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
+    METRICS: "/admin/metrics",
+    ANALYTICS: "/admin/analytics",
+
+    // Tenant Management
+    TENANTS: {
+      GET_ALL: "/admin/tenants",
+      GET_BY_ID: (id: string) => `/admin/tenants/${id}`,
+      CREATE: "/admin/tenants",
+      UPDATE: (id: string) => `/admin/tenants/${id}`,
+      DELETE: (id: string) => `/admin/tenants/${id}`,
+      SUSPEND: (id: string) => `/admin/tenants/${id}/suspend`,
+      ACTIVATE: (id: string) => `/admin/tenants/${id}/activate`,
+      STATS: (id: string) => `/admin/tenants/${id}/stats`,
+      USERS: (id: string) => `/admin/tenants/${id}/users`,
+    },
+
+    // System Users Management
     USERS: {
       GET_ALL: "/admin/users",
       GET_BY_ID: (id: string) => `/admin/users/${id}`,
@@ -44,8 +61,46 @@ export const API_ENDPOINTS = {
       SUSPEND: (id: string) => `/admin/users/${id}/suspend`,
       ACTIVATE: (id: string) => `/admin/users/${id}/activate`,
     },
+
+    // Subscription Management
+    SUBSCRIPTIONS: {
+      GET_ALL: "/admin/subscriptions",
+      GET_BY_ID: (id: string) => `/admin/subscriptions/${id}`,
+      UPDATE: (id: string) => `/admin/subscriptions/${id}`,
+      CANCEL: (id: string) => `/admin/subscriptions/${id}/cancel`,
+      RENEW: (id: string) => `/admin/subscriptions/${id}/renew`,
+    },
+
+    // Resource Management (All Tenants)
+    FACILITIES: {
+      GET_ALL: "/admin/facilities",
+      GET_BY_TENANT: (tenantId: string) =>
+        `/admin/tenants/${tenantId}/facilities`,
+    },
+    DOCTORS: {
+      GET_ALL: "/admin/doctors",
+      GET_BY_TENANT: (tenantId: string) => `/admin/tenants/${tenantId}/doctors`,
+    },
+    NURSES: {
+      GET_ALL: "/admin/nurses",
+      GET_BY_TENANT: (tenantId: string) => `/admin/tenants/${tenantId}/nurses`,
+    },
+    PATIENTS: {
+      GET_ALL: "/admin/patients",
+      GET_BY_TENANT: (tenantId: string) =>
+        `/admin/tenants/${tenantId}/patients`,
+    },
+    APPOINTMENTS: {
+      GET_ALL: "/admin/appointments",
+      GET_BY_TENANT: (tenantId: string) =>
+        `/admin/tenants/${tenantId}/appointments`,
+    },
+
+    // System Configuration
     SETTINGS: "/admin/settings",
-    ANALYTICS: "/admin/analytics",
+    NOTIFICATIONS: "/admin/notifications",
+    API_CONFIG: "/admin/api-config",
+    SECURITY: "/admin/security",
   },
 
   // Healthcare Specific Endpoints (examples)

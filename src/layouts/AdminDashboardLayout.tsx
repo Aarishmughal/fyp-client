@@ -45,76 +45,120 @@ import {
   Pill,
   FileText,
   UsersRound,
+  Shield,
+  BarChart3,
+  Database,
+  Bell,
+  Globe,
+  Lock,
 } from "lucide-react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { useMemo } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useAuth } from "@/context/AuthContext";
 
-function DashboardLayout() {
+function AdminDashboardLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/admin/login");
+  };
 
   const overviewItems = [
     {
       title: "Dashboard",
       icon: LayoutDashboard,
-      url: "/dashboard",
+      url: "/admin/dashboard",
     },
     {
-      title: "Facilities",
+      title: "Analytics",
+      icon: BarChart3,
+      url: "/admin/dashboard/analytics",
+    },
+  ];
+
+  const systemManagementItems = [
+    {
+      title: "Tenants",
       icon: Building2,
-      url: "/dashboard/facilities",
-    },
-  ];
-
-  const staffItems = [
-    {
-      title: "Doctors",
-      icon: Stethoscope,
-      url: "/dashboard/doctors",
+      url: "/admin/dashboard/tenants",
     },
     {
-      title: "Nurses",
-      icon: HeartPulse,
-      url: "/dashboard/nurses",
-    },
-    {
-      title: "Team Members",
+      title: "System Users",
       icon: UsersRound,
-      url: "/dashboard/users",
+      url: "/admin/dashboard/users",
+    },
+    {
+      title: "Subscriptions",
+      icon: Shield,
+      url: "/admin/dashboard/subscriptions",
     },
   ];
 
-  const patientCareItems = [
+  const resourceManagementItems = [
     {
-      title: "Patients",
-      icon: UserRound,
-      url: "/dashboard/patients",
+      title: "All Facilities",
+      icon: Building2,
+      url: "/admin/dashboard/facilities",
     },
+    {
+      title: "All Doctors",
+      icon: Stethoscope,
+      url: "/admin/dashboard/doctors",
+    },
+    {
+      title: "All Nurses",
+      icon: HeartPulse,
+      url: "/admin/dashboard/nurses",
+    },
+    {
+      title: "All Patients",
+      icon: UserRound,
+      url: "/admin/dashboard/patients",
+    },
+  ];
+
+  const dataManagementItems = [
     {
       title: "Appointments",
       icon: Calendar,
-      url: "/dashboard/appointments",
+      url: "/admin/dashboard/appointments",
     },
     {
       title: "Prescriptions",
       icon: Pill,
-      url: "/dashboard/prescriptions",
+      url: "/admin/dashboard/prescriptions",
     },
-  ];
-
-  const billingItems = [
     {
       title: "Invoices",
       icon: FileText,
-      url: "/dashboard/invoices",
+      url: "/admin/dashboard/invoices",
     },
   ];
 
-  const settingsItems = [
+  const configurationItems = [
     {
-      title: "Settings",
+      title: "System Settings",
       icon: Settings,
-      url: "/dashboard/settings",
+      url: "/admin/dashboard/settings",
+    },
+    {
+      title: "Notifications",
+      icon: Bell,
+      url: "/admin/dashboard/notifications",
+    },
+    {
+      title: "API Configuration",
+      icon: Globe,
+      url: "/admin/dashboard/api-config",
+    },
+    {
+      title: "Security",
+      icon: Lock,
+      url: "/admin/dashboard/security",
     },
   ];
 
@@ -123,17 +167,17 @@ function DashboardLayout() {
     const paths = location.pathname.split("/").filter(Boolean);
     const items = [];
 
-    // Always add Dashboard as first item if not on dashboard root
-    if (paths.length > 1) {
+    // Always add Admin Dashboard as first item if not on dashboard root
+    if (paths.length > 2) {
       items.push({
-        label: "Dashboard",
-        href: "/dashboard",
+        label: "Admin Dashboard",
+        href: "/admin/dashboard",
         isActive: false,
       });
     }
 
-    // Add remaining path segments
-    for (let i = 1; i < paths.length; i++) {
+    // Add remaining path segments (skip 'admin' and 'dashboard')
+    for (let i = 2; i < paths.length; i++) {
       const path = `/${paths.slice(0, i + 1).join("/")}`;
       const label = paths[i].charAt(0).toUpperCase() + paths[i].slice(1);
       const isActive = i === paths.length - 1;
@@ -157,13 +201,13 @@ function DashboardLayout() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild>
-                  <Link to="/dashboard">
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                      <HeartPulse className="size-4" />
+                  <Link to="/admin/dashboard">
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-destructive text-destructive-foreground">
+                      <Shield className="size-4" />
                     </div>
                     <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-semibold">Healthcare Portal</span>
-                      <span className="text-xs">Management System</span>
+                      <span className="font-semibold">Admin Portal</span>
+                      <span className="text-xs">System Management</span>
                     </div>
                   </Link>
                 </SidebarMenuButton>
@@ -199,12 +243,12 @@ function DashboardLayout() {
 
               <SidebarSeparator />
 
-              {/* Staff Management Group */}
+              {/* System Management Group */}
               <SidebarGroup>
-                <SidebarGroupLabel>Staff Management</SidebarGroupLabel>
+                <SidebarGroupLabel>System Management</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {staffItems.map((item) => (
+                    {systemManagementItems.map((item) => (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           asChild
@@ -224,12 +268,12 @@ function DashboardLayout() {
 
               <SidebarSeparator />
 
-              {/* Patient Care Group */}
+              {/* Resource Management Group */}
               <SidebarGroup>
-                <SidebarGroupLabel>Patient Care</SidebarGroupLabel>
+                <SidebarGroupLabel>Resource Management</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {patientCareItems.map((item) => (
+                    {resourceManagementItems.map((item) => (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           asChild
@@ -249,12 +293,12 @@ function DashboardLayout() {
 
               <SidebarSeparator />
 
-              {/* Billing Group */}
+              {/* Data Management Group */}
               <SidebarGroup>
-                <SidebarGroupLabel>Billing</SidebarGroupLabel>
+                <SidebarGroupLabel>Data Management</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {billingItems.map((item) => (
+                    {dataManagementItems.map((item) => (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           asChild
@@ -274,12 +318,12 @@ function DashboardLayout() {
 
               <SidebarSeparator />
 
-              {/* Settings Group */}
+              {/* Configuration Group */}
               <SidebarGroup>
                 <SidebarGroupLabel>Configuration</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {settingsItems.map((item) => (
+                    {configurationItems.map((item) => (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           asChild
@@ -299,7 +343,7 @@ function DashboardLayout() {
             </ScrollArea>
           </SidebarContent>
 
-          {/* Footer with User Profile */}
+          {/* Footer with Admin Profile */}
           <SidebarFooter>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -310,15 +354,17 @@ function DashboardLayout() {
                       className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                     >
                       <Avatar className="h-8 w-8 rounded-lg">
-                        <AvatarImage src="/avatar.png" alt="User" />
-                        <AvatarFallback className="rounded-lg">
-                          JD
+                        <AvatarImage src="/admin-avatar.png" alt="Admin" />
+                        <AvatarFallback className="rounded-lg bg-destructive text-destructive-foreground">
+                          AD
                         </AvatarFallback>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">John Doe</span>
+                        <span className="truncate font-semibold">
+                          System Admin
+                        </span>
                         <span className="truncate text-xs">
-                          john@example.com
+                          admin@system.com
                         </span>
                       </div>
                       <ChevronDown className="ml-auto size-4" />
@@ -332,13 +378,13 @@ function DashboardLayout() {
                   >
                     <DropdownMenuItem>
                       <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
+                      <span>Admin Profile</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
                     </DropdownMenuItem>
@@ -359,7 +405,7 @@ function DashboardLayout() {
                 <BreadcrumbList>
                   {breadcrumbs.length === 0 ? (
                     <BreadcrumbItem>
-                      <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                      <BreadcrumbPage>Admin Dashboard</BreadcrumbPage>
                     </BreadcrumbItem>
                   ) : (
                     breadcrumbs.map((crumb, index) => (
@@ -401,4 +447,4 @@ function DashboardLayout() {
   );
 }
 
-export default DashboardLayout;
+export default AdminDashboardLayout;
