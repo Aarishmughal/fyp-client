@@ -17,6 +17,12 @@ import "./styles/App.css";
 import FaisalMoversPitch from "./pages/main/Presentation";
 import DashboardLayout from "./layouts/DashboardLayout";
 import {
+  DoctorLayout,
+  NurseLayout,
+  PatientLayout,
+  TeamLayout,
+} from "./layouts/roles";
+import {
   Overview,
   Settings as DashboardSettings,
   Facilities,
@@ -28,6 +34,12 @@ import {
   Invoices,
   Users,
 } from "./pages/dashboard";
+import {
+  DoctorDashboard,
+  NurseDashboard,
+  PatientDashboard,
+  TeamDashboard,
+} from "./pages/dashboards";
 
 function App() {
   return (
@@ -72,6 +84,155 @@ function App() {
         <Route path="invoices" element={<Invoices />} />
         <Route path="users" element={<Users />} />
         <Route path="settings" element={<DashboardSettings />} />
+      </Route>
+
+      {/* Role-Based Dashboard Routes - Temporary */}
+      {/* Doctor Routes */}
+      <Route path="/doctor" element={<DoctorLayout />}>
+        <Route path="dashboard" element={<DoctorDashboard />} />
+        <Route
+          path="appointments"
+          element={<div className="p-4">My Appointments - Coming Soon</div>}
+        />
+        <Route
+          path="patients"
+          element={<div className="p-4">My Patients - Coming Soon</div>}
+        />
+        <Route
+          path="queue"
+          element={<div className="p-4">Patient Queue - Coming Soon</div>}
+        />
+        <Route
+          path="prescriptions"
+          element={<div className="p-4">Prescriptions - Coming Soon</div>}
+        />
+        <Route
+          path="lab-results"
+          element={<div className="p-4">Lab Results - Coming Soon</div>}
+        />
+        <Route
+          path="medical-records"
+          element={<div className="p-4">Medical Records - Coming Soon</div>}
+        />
+        <Route
+          path="messages"
+          element={<div className="p-4">Messages - Coming Soon</div>}
+        />
+        <Route
+          path="settings"
+          element={<div className="p-4">Settings - Coming Soon</div>}
+        />
+      </Route>
+
+      {/* Nurse Routes */}
+      <Route path="/nurse" element={<NurseLayout />}>
+        <Route path="dashboard" element={<NurseDashboard />} />
+        <Route
+          path="patients"
+          element={<div className="p-4">My Patients - Coming Soon</div>}
+        />
+        <Route
+          path="vitals"
+          element={<div className="p-4">Vitals Monitoring - Coming Soon</div>}
+        />
+        <Route
+          path="medications"
+          element={<div className="p-4">Medication Schedule - Coming Soon</div>}
+        />
+        <Route
+          path="tasks"
+          element={<div className="p-4">Tasks & Checklist - Coming Soon</div>}
+        />
+        <Route
+          path="alerts"
+          element={<div className="p-4">Alerts - Coming Soon</div>}
+        />
+        <Route
+          path="schedule"
+          element={<div className="p-4">Shift Schedule - Coming Soon</div>}
+        />
+        <Route
+          path="notes"
+          element={<div className="p-4">Patient Notes - Coming Soon</div>}
+        />
+        <Route
+          path="handover"
+          element={<div className="p-4">Shift Handover - Coming Soon</div>}
+        />
+        <Route
+          path="settings"
+          element={<div className="p-4">Settings - Coming Soon</div>}
+        />
+      </Route>
+
+      {/* Patient Routes */}
+      <Route path="/patient" element={<PatientLayout />}>
+        <Route path="dashboard" element={<PatientDashboard />} />
+        <Route
+          path="appointments"
+          element={<div className="p-4">My Appointments - Coming Soon</div>}
+        />
+        <Route
+          path="prescriptions"
+          element={<div className="p-4">My Prescriptions - Coming Soon</div>}
+        />
+        <Route
+          path="lab-results"
+          element={<div className="p-4">Lab Results - Coming Soon</div>}
+        />
+        <Route
+          path="records"
+          element={<div className="p-4">Health Records - Coming Soon</div>}
+        />
+        <Route
+          path="messages"
+          element={<div className="p-4">Messages - Coming Soon</div>}
+        />
+        <Route
+          path="billing"
+          element={<div className="p-4">Billing & Payments - Coming Soon</div>}
+        />
+        <Route
+          path="settings"
+          element={<div className="p-4">Settings - Coming Soon</div>}
+        />
+      </Route>
+
+      {/* Team Member Routes */}
+      <Route path="/team" element={<TeamLayout />}>
+        <Route path="dashboard" element={<TeamDashboard />} />
+        <Route
+          path="tasks"
+          element={<div className="p-4">My Tasks - Coming Soon</div>}
+        />
+        <Route
+          path="meetings"
+          element={<div className="p-4">Meetings - Coming Soon</div>}
+        />
+        <Route
+          path="schedule"
+          element={<div className="p-4">Schedule - Coming Soon</div>}
+        />
+        <Route
+          path="members"
+          element={<div className="p-4">Team Members - Coming Soon</div>}
+        />
+        <Route
+          path="approvals"
+          element={<div className="p-4">Approvals - Coming Soon</div>}
+        />
+        <Route
+          path="reports"
+          element={<div className="p-4">Reports - Coming Soon</div>}
+        />
+        <Route
+          path="messages"
+          element={<div className="p-4">Messages - Coming Soon</div>}
+        />
+        <Route
+          path="settings"
+          element={<div className="p-4">Settings - Coming Soon</div>}
+        />
       </Route>
 
       {/* Protected routes - Admin Dashboard */}
